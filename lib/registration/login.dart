@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
                       // background
                       foregroundColor: Colors.white, // foreground
                     ),
-                    child: const Text('Login'),
+                    child: const Text('LOGIN'),
                   )
                 ],
               ),
