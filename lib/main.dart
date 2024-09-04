@@ -5,7 +5,8 @@ import 'package:registration_app/registration/register.dart';
 void main() {
   runApp(MaterialApp(
     routes: {
-      '/': (context) => const Register(),
+      '/': (context) => const Login(),
+      '/register': (context) => const Register(),
     },
   ));
 }

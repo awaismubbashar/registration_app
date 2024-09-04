@@ -171,23 +171,28 @@ class _LoginState extends State<Login> {
                   ),
                 ],
               ),
-              const Column(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Don\'t have an account? ',
                           style: TextStyle(fontWeight: FontWeight.w400),
                         ),
-                        Text(
-                          'Register',
-                          style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontWeight: FontWeight.w700),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/register");
+                          },
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                                color: Colors.lightBlue,
+                                fontWeight: FontWeight.w700),
+                          ),
                         ),
                       ],
                     ),

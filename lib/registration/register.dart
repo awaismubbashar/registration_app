@@ -18,7 +18,7 @@ class _RegisterState extends State<Register> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
@@ -123,26 +123,28 @@ class _RegisterState extends State<Register> {
                   )
                 ],
               ),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already have an account? ',
-                        style: TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                      Text(
+              Container(
+                margin: const EdgeInsets.only(top: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Already have an account? ',
+                      style: TextStyle(fontWeight: FontWeight.w400),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, "/");
+                      },
+                      child: const Text(
                         'Login',
                         style: TextStyle(
                             color: Colors.lightBlue,
                             fontWeight: FontWeight.w700),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
