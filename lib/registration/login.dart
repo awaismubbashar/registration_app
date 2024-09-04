@@ -8,9 +8,21 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _validate = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 35.0),
@@ -37,22 +49,40 @@ class _LoginState extends State<Login> {
                         fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 30.0),
-                  const TextField(
+                  TextFormField(
+                    validator: (text) {
+                      if (!(text!.contains('@')) && text.isNotEmpty) {
+                        return "Enter a valid email address!";
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    autovalidateMode: AutovalidateMode.always,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
                       labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 20.0),
-                      suffixStyle: TextStyle(
+                      errorText: _validate ? 'Please enter email' : null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 20.0),
+                      suffixStyle: const TextStyle(
                         color: Colors.lightBlue,
                       ),
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (text) {
+                      if (!(text!.length > 5) && text.isNotEmpty) {
+                        return "Enter password minimum 6 characters";
+                      }
+                      return null;
+                    },
+                    controller: _passwordController,
+                    decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
@@ -80,7 +110,11 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 40.0),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        _validate = _emailController.text.isEmpty &&  _passwordController.text.isEmpty;
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(55),
                       shape: RoundedRectangleBorder(

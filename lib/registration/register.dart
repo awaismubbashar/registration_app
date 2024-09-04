@@ -8,9 +8,28 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _mobileNumberController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+
+  bool _validate = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _mobileNumberController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 35.0),
@@ -36,78 +55,146 @@ class _RegisterState extends State<Register> {
                         fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 30.0),
-                  const TextField(
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (text) {
+                      if (!(text!.length > 5) && text.isNotEmpty) {
+                        return "Enter valid name of more then 5 characters";
+                      }
+                      return null;
+                    },
+                    controller: _nameController,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
+                      errorText: _validate ? 'Please enter name' : null,
                       labelText: 'Name',
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: TextStyle(
+                      // errorText: _validate ? 'Please enter name': null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 18.0),
+                      suffixStyle: const TextStyle(
                         color: Colors.lightBlue,
                       ),
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  const TextField(
+                  TextFormField(
+                    validator: (text) {
+                      if (!(text!.contains('@')) && text.isNotEmpty) {
+                        return "Enter a valid email address!";
+                      }
+                      return null;
+                    },
+                    controller: _emailController,
+                    autovalidateMode: AutovalidateMode.always,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
+                      errorBorder: const UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.red, width: 1.9)),
                       labelText: 'Email',
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: TextStyle(
-                        color: Colors.lightBlue,
-                      ),
+                      errorText: _validate ? 'Please enter email' : null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 18.0),
+                      suffixStyle: const TextStyle(color: Colors.lightBlue),
                     ),
                   ),
-                  const TextField(
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (mobileNumber) {
+                      if (!(mobileNumber!.length >= 12) &&
+                          mobileNumber.isNotEmpty) {
+                        return "Enter valid mobile number";
+                      }
+                      return null;
+                    },
+                    controller: _mobileNumberController,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
                       labelText: 'Mobile Number',
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: TextStyle(
+                      errorText:
+                          _validate ? 'Please enter mobile number' : null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 18.0),
+                      suffixStyle: const TextStyle(
                         color: Colors.lightBlue,
                       ),
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  const TextField(
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (text) {
+                      if (!(text!.length > 5) && text.isNotEmpty) {
+                        return "Enter password minimum 6 characters";
+                      }
+                      return null;
+                    },
+                    controller: _passwordController,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
                       // labelText: 'Password',
-                      label: Text(
+                      label: const Text(
                         'Password',
                       ),
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 18.0),
+                      errorText: _validate ? 'Please enter password' : null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 18.0),
                     ),
                     obscureText: true,
                   ),
-                  const TextField(
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.always,
+                    validator: (text) {
+                      if (!(text!.length > 5) && text.isNotEmpty) {
+                        return "Enter password minimum 6 characters";
+                      }
+                      return null;
+                    },
+                    controller: _confirmPasswordController,
                     decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.lightBlue, width: 1.9),
                       ),
                       // labelText: 'Password',
-                      label: Text(
+                      label: const Text(
                         'Confirm Password',
                       ),
-                      labelStyle: TextStyle(color: Colors.grey, fontSize: 18.0),
+                      errorText: _validate ? 'Please enter password' : null,
+                      labelStyle:
+                          const TextStyle(color: Colors.grey, fontSize: 18.0),
                     ),
                     obscureText: true,
                   ),
                   const SizedBox(height: 40.0),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      print('regidter clicked');
+                      if (_emailController.text.isEmpty) {
+                        print('eamil is empty');
+                      } else {
+                        print(_emailController.text);
+                      }
+                      setState(() {
+                        _validate = _emailController.text.isEmpty &&
+                            _nameController.text.isEmpty &&
+                            _mobileNumberController.text.isEmpty &&
+                            _passwordController.text.isEmpty &&
+                            _confirmPasswordController.text.isEmpty;
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(55),
                       shape: RoundedRectangleBorder(
