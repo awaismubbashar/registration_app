@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:registration_app/util/utils.dart';
 import 'package:registration_app/widgets/general_widget.dart';
-
-import '../model/categories_model.dart';
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -92,11 +89,8 @@ class _HomeState extends State<Home> {
                   scrollDirection: Axis.horizontal,
                   itemCount: Utils.coursesList().length,
                   itemBuilder: (BuildContext context, int index) {
-                    return GeneralWidget.courseItem(
-                      Utils.coursesList()[index]
-                    );
+                    return GeneralWidget.courseItem(Utils.coursesList()[index]);
                   },
-
                 ),
               )
             ],

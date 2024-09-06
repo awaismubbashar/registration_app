@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/registration/Login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -221,7 +222,10 @@ class _RegisterState extends State<Register> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(context, "/");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Login()),
+                        );
                       },
                       child: const Text(
                         'Login',

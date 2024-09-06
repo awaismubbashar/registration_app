@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/registration/register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -112,7 +113,8 @@ class _LoginState extends State<Login> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        _validate = _emailController.text.isEmpty &&  _passwordController.text.isEmpty;
+                        _validate = _emailController.text.isEmpty &&
+                            _passwordController.text.isEmpty;
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -219,7 +221,11 @@ class _LoginState extends State<Login> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, "/register");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Register()),
+                            );
                           },
                           child: const Text(
                             'Register',
