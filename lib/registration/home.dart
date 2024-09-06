@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/registration/Login.dart';
 import 'package:registration_app/util/utils.dart';
 import 'package:registration_app/widgets/general_widget.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -55,8 +57,26 @@ class _HomeState extends State<Home> {
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (BuildContext context, int index) {
-                    return GeneralWidget.categoriesItem(
-                      Utils.categoriesList()[index],
+                    return GestureDetector(
+                      child: GeneralWidget.categoriesItem(
+                        Utils.categoriesList()[index],
+                      ),
+                      onTap: () {
+                        if (Utils.categoriesList()[index].title == 'Books') {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                                settings: RouteSettings(
+                                  arguments: {
+                                    'title': Utils.categoriesList()[index]
+                                        .title
+                                  }, // Pass the argument here
+                                ),
+                              ));
+                          //
+                        }
+                      },
                     );
                   },
                   itemCount: Utils.categoriesList().length,
