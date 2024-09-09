@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:registration_app/registration/Login.dart';
 import 'package:registration_app/util/utils.dart';
 import 'package:registration_app/widgets/general_widget.dart';
+
+import '../viewmodel/home_viewmodel.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,8 +14,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+    final viewModel = Provider.of<HomeViewmodel>(context);
+    viewModel.fetchAlbum();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -22,15 +35,15 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Home Page',
+                      viewModel.abc,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
-                    Icon(Icons.alarm)
+                    const Icon(Icons.alarm)
                   ],
                 ),
                 const Text(
