@@ -56,159 +56,15 @@ class _RegisterState extends State<Register> {
                         fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 30.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: (text) {
-                      if (!(text!.length > 5) && text.isNotEmpty) {
-                        return "Enter valid name of more then 5 characters";
-                      }
-                      return null;
-                    },
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.lightBlue, width: 1.9),
-                      ),
-                      errorText: _validate ? 'Please enter name' : null,
-                      labelText: 'Name',
-                      // errorText: _validate ? 'Please enter name': null,
-                      labelStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: const TextStyle(
-                        color: Colors.lightBlue,
-                      ),
-                    ),
-                  ),
+                  nameTextField(),
                   const SizedBox(height: 10.0),
-                  TextFormField(
-                    validator: (text) {
-                      if (!(text!.contains('@')) && text.isNotEmpty) {
-                        return "Enter a valid email address!";
-                      }
-                      return null;
-                    },
-                    controller: _emailController,
-                    autovalidateMode: AutovalidateMode.always,
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.lightBlue, width: 1.9),
-                      ),
-                      errorBorder: const UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.red, width: 1.9)),
-                      labelText: 'Email',
-                      errorText: _validate ? 'Please enter email' : null,
-                      labelStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: const TextStyle(color: Colors.lightBlue),
-                    ),
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: (mobileNumber) {
-                      if (!(mobileNumber!.length >= 12) &&
-                          mobileNumber.isNotEmpty) {
-                        return "Enter valid mobile number";
-                      }
-                      return null;
-                    },
-                    controller: _mobileNumberController,
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.lightBlue, width: 1.9),
-                      ),
-                      labelText: 'Mobile Number',
-                      errorText:
-                          _validate ? 'Please enter mobile number' : null,
-                      labelStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 18.0),
-                      suffixStyle: const TextStyle(
-                        color: Colors.lightBlue,
-                      ),
-                    ),
-                  ),
+                  emailTextField(),
+                  mobileNumberTextField(),
                   const SizedBox(height: 10.0),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: (text) {
-                      if (!(text!.length > 5) && text.isNotEmpty) {
-                        return "Enter password minimum 6 characters";
-                      }
-                      return null;
-                    },
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.lightBlue, width: 1.9),
-                      ),
-                      // labelText: 'Password',
-                      label: const Text(
-                        'Password',
-                      ),
-                      errorText: _validate ? 'Please enter password' : null,
-                      labelStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 18.0),
-                    ),
-                    obscureText: true,
-                  ),
-                  TextFormField(
-                    autovalidateMode: AutovalidateMode.always,
-                    validator: (text) {
-                      if (!(text!.length > 5) && text.isNotEmpty) {
-                        return "Enter password minimum 6 characters";
-                      }
-                      return null;
-                    },
-                    controller: _confirmPasswordController,
-                    decoration: InputDecoration(
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Colors.lightBlue, width: 1.9),
-                      ),
-                      // labelText: 'Password',
-                      label: const Text(
-                        'Confirm Password',
-                      ),
-                      errorText: _validate ? 'Please enter password' : null,
-                      labelStyle:
-                          const TextStyle(color: Colors.grey, fontSize: 18.0),
-                    ),
-                    obscureText: true,
-                  ),
+                  passwordTextField(),
+                  confirmPasswordTextField(),
                   const SizedBox(height: 40.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      print('regidter clicked');
-                      if (_emailController.text.isEmpty) {
-                        print('eamil is empty');
-                      } else {
-                        print(_emailController.text);
-                      }
-                      setState(() {
-                        _validate = _emailController.text.isEmpty &&
-                            _nameController.text.isEmpty &&
-                            _mobileNumberController.text.isEmpty &&
-                            _passwordController.text.isEmpty &&
-                            _confirmPasswordController.text.isEmpty;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(55),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6), // <-- Radius
-                      ),
-                      textStyle: const TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                      backgroundColor: Colors.lightBlue,
-                      // background
-                      foregroundColor: Colors.white, // foreground
-                    ),
-                    child: const Text('REGISTER'),
-                  )
+                  registerButton(),
                 ],
               ),
               Container(
@@ -224,7 +80,8 @@ class _RegisterState extends State<Register> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Login()),
+                          MaterialPageRoute(
+                              builder: (context) => const Login()),
                         );
                       },
                       child: const Text(
@@ -241,6 +98,160 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget nameTextField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
+      validator: (text) {
+        if (!(text!.length > 5) && text.isNotEmpty) {
+          return "Enter valid name of more then 5 characters";
+        }
+        return null;
+      },
+      controller: _nameController,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlue, width: 1.9),
+        ),
+        errorText: _validate ? 'Please enter name' : null,
+        labelText: 'Name',
+        // errorText: _validate ? 'Please enter name': null,
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 18.0),
+        suffixStyle: const TextStyle(
+          color: Colors.lightBlue,
+        ),
+      ),
+    );
+  }
+
+  Widget emailTextField() {
+    return TextFormField(
+      validator: (text) {
+        if (!(text!.contains('@')) && text.isNotEmpty) {
+          return "Enter a valid email address!";
+        }
+        return null;
+      },
+      controller: _emailController,
+      autovalidateMode: AutovalidateMode.always,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlue, width: 1.9),
+        ),
+        errorBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red, width: 1.9)),
+        labelText: 'Email',
+        errorText: _validate ? 'Please enter email' : null,
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 18.0),
+        suffixStyle: const TextStyle(color: Colors.lightBlue),
+      ),
+    );
+  }
+
+  Widget mobileNumberTextField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
+      validator: (mobileNumber) {
+        if (!(mobileNumber!.length >= 12) && mobileNumber.isNotEmpty) {
+          return "Enter valid mobile number";
+        }
+        return null;
+      },
+      controller: _mobileNumberController,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlue, width: 1.9),
+        ),
+        labelText: 'Mobile Number',
+        errorText: _validate ? 'Please enter mobile number' : null,
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 18.0),
+        suffixStyle: const TextStyle(
+          color: Colors.lightBlue,
+        ),
+      ),
+    );
+  }
+
+  Widget passwordTextField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
+      validator: (text) {
+        if (!(text!.length > 5) && text.isNotEmpty) {
+          return "Enter password minimum 6 characters";
+        }
+        return null;
+      },
+      controller: _passwordController,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlue, width: 1.9),
+        ),
+        // labelText: 'Password',
+        label: const Text(
+          'Password',
+        ),
+        errorText: _validate ? 'Please enter password' : null,
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 18.0),
+      ),
+      obscureText: true,
+    );
+  }
+
+  Widget confirmPasswordTextField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.always,
+      validator: (text) {
+        if (!(text!.length > 5) && text.isNotEmpty) {
+          return "Enter password minimum 6 characters";
+        }
+        return null;
+      },
+      controller: _confirmPasswordController,
+      decoration: InputDecoration(
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.lightBlue, width: 1.9),
+        ),
+        // labelText: 'Password',
+        label: const Text(
+          'Confirm Password',
+        ),
+        errorText: _validate ? 'Please enter password' : null,
+        labelStyle: const TextStyle(color: Colors.grey, fontSize: 18.0),
+      ),
+      obscureText: true,
+    );
+  }
+
+  Widget registerButton() {
+    return ElevatedButton(
+      onPressed: () {
+        print('register clicked');
+        if (_emailController.text.isEmpty) {
+          print('email is empty');
+        } else {
+          print(_emailController.text);
+        }
+        setState(() {
+          _validate = _emailController.text.isEmpty &&
+              _nameController.text.isEmpty &&
+              _mobileNumberController.text.isEmpty &&
+              _passwordController.text.isEmpty &&
+              _confirmPasswordController.text.isEmpty;
+        });
+      },
+      style: ElevatedButton.styleFrom(
+        minimumSize: const Size.fromHeight(55),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6), // <-- Radius
+        ),
+        textStyle: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+        backgroundColor: Colors.lightBlue,
+        // background
+        foregroundColor: Colors.white, // foreground
+      ),
+      child: const Text('REGISTER'),
     );
   }
 }
