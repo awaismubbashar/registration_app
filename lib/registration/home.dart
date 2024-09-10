@@ -4,6 +4,7 @@ import 'package:registration_app/registration/Login.dart';
 import 'package:registration_app/util/utils.dart';
 import 'package:registration_app/widgets/general_widget.dart';
 
+import '../network/response.dart';
 import '../viewmodel/home_viewmodel.dart';
 
 class Home extends StatefulWidget {
@@ -14,7 +15,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   @override
   void initState() {
     super.initState();
@@ -22,9 +22,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-
     final viewModel = Provider.of<HomeViewmodel>(context);
-    viewModel.fetchAlbum();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.fetchAlbum(); // Call this after the widget tree has finished building
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -35,15 +36,15 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      viewModel.abc,
+                      'Home',
                       style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                     ),
-                    const Icon(Icons.alarm)
+                    Icon(Icons.alarm)
                   ],
                 ),
                 const Text(
@@ -53,10 +54,13 @@ class _HomeState extends State<Home> {
                 const SizedBox(height: 30),
                 search(),
                 const SizedBox(height: 30),
-                categoriesList(),
-                const Text('Recommended Course',
-                    style:
-                        TextStyle(fontSize: 19, fontWeight: FontWeight.w400)),
+                categoriesList(viewModel),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 25, 0, 0),
+                  child: Text('Recommended Course',
+                      style:
+                          TextStyle(fontSize: 19, fontWeight: FontWeight.w500)),
+                ),
                 const Row(
                   children: [
                     Padding(
@@ -96,38 +100,59 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget categoriesList() {
-    return SizedBox(
-      child: GridView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            child: GeneralWidget.categoriesItem(
-              Utils.categoriesList()[index],
-            ),
-            onTap: () {
-              if (Utils.categoriesList()[index].title == 'Books') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Login(),
-                      settings: RouteSettings(
-                        arguments: {
-                          'title': Utils.categoriesList()[index].title
-                        }, // Pass the argument here
-                      ),
-                    ));
-                //
-              }
-            },
+  Widget categoriesList(HomeViewmodel homeViewModel) {
+
+    switch (homeViewModel.apiResponse.status) {
+      case Status.LOADING:
+        return const Center(child: CircularProgressIndicator());
+      case Status.COMPLETED:
+        if (homeViewModel.albums.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
-        },
-        itemCount: Utils.categoriesList().length,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-      ),
-    );
+        }
+
+        return Scrollbar(
+          thumbVisibility: true,
+          child: SizedBox(
+            height: 210,
+            child: GridView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  child: GeneralWidget.categoriesItem(
+                    homeViewModel
+                        .albums[index], // Access the album only when it's available
+                  ),
+                  onTap: () {
+                    if (Utils.categoriesList()[index].title == 'Books') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Login(),
+                            settings: RouteSettings(
+                              arguments: {
+                                'title': Utils.categoriesList()[index].title
+                              }, // Pass the argument here
+                            ),
+                          ));
+                    }
+                  },
+                );
+              },
+              itemCount: 12,
+              // Use albums length instead of Utils.categoriesList
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3),
+            ),
+          ),
+        );
+      case Status.ERROR:
+        return Center(child: Text("Error: ${homeViewModel.apiResponse.message}"));
+      default:
+        return Container();  // Handle any other unknown cases
+    }
   }
 
   Widget search() {

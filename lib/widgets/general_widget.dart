@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/model/album.dart';
 import 'package:registration_app/model/categories_model.dart';
 import 'package:registration_app/model/course_model.dart';
 
 class GeneralWidget {
-  static categoriesItem(CategoriesModel category) {
+  static categoriesItem(Album category) {
     return Column(
       children: [
-        CircleAvatar(
-          backgroundColor: category.background,
+        const CircleAvatar(
+          backgroundColor: Colors.lightBlue,
           minRadius: 30,
           maxRadius: 30,
-          child: Icon(category.icon),
+          child: Icon(Icons.star),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-          child: Text(category.title),
+          padding: const EdgeInsets.fromLTRB(4, 5, 4, 0),
+          child: SizedBox(
+            child: Center(
+              child: Text(
+                overflow: TextOverflow.ellipsis,
+                  category.title,
+                  maxLines: 1,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600
+                ),
+              ),
+            ),
+          ),
         )
       ],
     );
@@ -37,15 +49,18 @@ class GeneralWidget {
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                     color: Colors.grey)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/${course.rate}',
-                  width: 50,
-                ),
-                const Icon(Icons.heart_broken)
-              ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    'assets/${course.rate}',
+                    width: 50,
+                  ),
+                  const Icon(Icons.heart_broken)
+                ],
+              ),
             )
           ],
         ),

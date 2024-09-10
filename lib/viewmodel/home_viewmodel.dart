@@ -1,20 +1,26 @@
 import 'package:flutter/cupertino.dart';
+import 'package:registration_app/network/response.dart';
+import 'package:registration_app/repository/home_repository.dart';
 import '../model/album.dart';
-import '../network/network.dart';
 
 class HomeViewmodel extends ChangeNotifier {
-  String abc = 'abc';
-  final NetworkService networkService;
-  HomeViewmodel(this.networkService);
+  List<Album> albums = [];
+  ApiResponse<List<Album>> _apiResponse = ApiResponse.loading('Fetching albums...');
+  ApiResponse<List<Album>> get apiResponse => _apiResponse;
+
+  final HomeRepository homeRepository;
+  HomeViewmodel(this.homeRepository);
 
   Future<void> fetchAlbum() async {
+    _apiResponse = ApiResponse.loading('Loading...');
+    Future.microtask(() => notifyListeners());
     try {
-      List<Album> albums = await networkService.fetchAlbum();
-      abc = albums.first.title;
-      notifyListeners();
+      List<Album> movies = await homeRepository.fetchMovieList();
+      albums = movies;
+      _apiResponse = ApiResponse.completed(movies);
     } catch (e) {
-      print('Error fetching albums: $e');
-      throw e;
+      _apiResponse = ApiResponse.error(e.toString());
     }
+    Future.microtask(() => notifyListeners());
   }
 }

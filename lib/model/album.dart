@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 class Album {
-  String userId;
+  int userId;
   int id;
   String title;
 
@@ -9,7 +7,7 @@ class Album {
 
   factory Album.fromJson(Map<String, dynamic> json) {
     return Album(
-      userId: json['userId'].toString(),
+      userId: json['userId'],
       id: json['id'],
       title: json['title'],
     );

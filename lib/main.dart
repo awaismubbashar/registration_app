@@ -3,14 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:registration_app/registration/Login.dart';
 import 'package:registration_app/registration/home.dart';
 import 'package:registration_app/registration/register.dart';
+import 'package:registration_app/repository/home_repository.dart';
 import 'package:registration_app/viewmodel/home_viewmodel.dart';
-
-import 'network/network.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => HomeViewmodel(NetworkService()),
+      create: (context) => HomeViewmodel(HomeRepository()),
       child: const MainApp(),
     ),
   );
@@ -21,8 +20,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const MainClass(),
+    return const MaterialApp(
+      home: MainClass(),
     );
   }
 }
