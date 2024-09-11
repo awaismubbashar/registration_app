@@ -5,7 +5,7 @@ class HomeRepository {
   ApiBaseHelper _helper = ApiBaseHelper();
 
   Future<List<Album>> fetchMovieList() async {
-    final response = await _helper.get("albums/");
+    final response = await _helper.request(url: 'albums/', method:  'GET');
     List<Album> result = (response as List).map((albumJson) => Album.fromJson(albumJson)).toList();
 
     return result;
