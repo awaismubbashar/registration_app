@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:registration_app/registration/Login.dart';
 import 'package:registration_app/util/utils.dart';
 import 'package:registration_app/widgets/general_widget.dart';
-
 import '../network/response.dart';
 import '../viewmodel/home_viewmodel.dart';
 
@@ -15,18 +14,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late HomeViewmodel viewModel = Provider.of<HomeViewmodel>(context);
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel
+          .fetchAlbum(); // Call this after the widget tree has finished building
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<HomeViewmodel>(context);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      viewModel.fetchAlbum(); // Call this after the widget tree has finished building
-    });
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget categoriesList(HomeViewmodel homeViewModel) {
-
+    final ScrollController _controller = ScrollController();
     switch (homeViewModel.apiResponse.status) {
       case Status.LOADING:
         return const Center(child: CircularProgressIndicator());
@@ -114,16 +114,19 @@ class _HomeState extends State<Home> {
 
         return Scrollbar(
           thumbVisibility: true,
+          trackVisibility: true,
+          controller: _controller,
           child: SizedBox(
             height: 210,
             child: GridView.builder(
+              controller: _controller,
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   child: GeneralWidget.categoriesItem(
-                    homeViewModel
-                        .albums[index], // Access the album only when it's available
+                    homeViewModel.albums[
+                        index], // Access the album only when it's available
                   ),
                   onTap: () {
                     if (Utils.categoriesList()[index].title == 'Books') {
@@ -149,9 +152,10 @@ class _HomeState extends State<Home> {
           ),
         );
       case Status.ERROR:
-        return Center(child: Text("Error: ${homeViewModel.apiResponse.message}"));
+        return Center(
+            child: Text("Error: ${homeViewModel.apiResponse.message}"));
       default:
-        return Container();  // Handle any other unknown cases
+        return Container(); // Handle any other unknown cases
     }
   }
 

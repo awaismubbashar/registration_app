@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'exception.dart';
+import 'exception_handler.dart';
 
 class ApiBaseHelper {
   final String _baseUrl = "https://jsonplaceholder.typicode.com/";
